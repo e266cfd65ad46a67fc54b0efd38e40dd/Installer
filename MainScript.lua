@@ -299,6 +299,16 @@ local World = GuiLibrary.CreateWindow({
 	Icon = "vape/assets/WorldIcon.png", 
 	IconSize = 16
 })
+local Movement = GuiLibrary.CreateWindow({
+	Name = "Movement", 
+	Icon = "vape/assets/WorldIcon.png", 
+	IconSize = 0
+})
+local Funnis = GuiLibrary.CreateWindow({
+	Name = "Funnis", 
+	Icon = "vape/assets/WorldIcon.png", 
+	IconSize = 0
+})
 local Friends = GuiLibrary.CreateWindow2({
 	Name = "Friends", 
 	Icon = "vape/assets/FriendsIcon.png", 
@@ -344,6 +354,18 @@ GUI.CreateButton({
 	Function = function(callback) World.SetVisible(callback) end, 
 	Icon = "vape/assets/WorldIcon.png", 
 	IconSize = 16
+})
+GUI.CreateButton({
+	Name = "Movement", 
+	Function = function(callback) Movement.SetVisible(callback) end, 
+	Icon = "vape/assets/WorldIcon.png", 
+	IconSize = 0
+})
+GUI.CreateButton({
+	Name = "Funnis", 
+	Function = function(callback) Funnis.SetVisible(callback) end, 
+	Icon = "vape/assets/WorldIcon.png", 
+	IconSize = 0
 })
 GUI.CreateDivider("MISC")
 GUI.CreateButton({
@@ -1574,11 +1596,13 @@ local windowSortOrder = {
 	RenderButton = 3,
 	UtilityButton = 4,
 	WorldButton = 5,
-	FriendsButton = 6,
-	TargetsButton = 7,
-	ProfilesButton = 8
+	MovementButton = 6,
+	FunnisButton = 7,
+	FriendsButton = 8,
+	TargetsButton = 9,
+	ProfilesButton = 10
 }
-local windowSortOrder2 = {"Combat", "Blatant", "Render", "Utility", "World"}
+local windowSortOrder2 = {"Combat", "Blatant", "Render", "Utility", "World", "Movement", "Funnis"}
 
 local function getVapeSaturation(val)
 	local sat = 0.9
@@ -1899,12 +1923,14 @@ GUISettings.CreateButton2({
 			RenderWindow = 4,
 			UtilityWindow = 5,
 			WorldWindow = 6,
-			FriendsWindow = 7,
-			TargetsWindow = 8,
-			ProfilesWindow = 9,
-			["Text GUICustomWindow"] = 10,
-			TargetInfoCustomWindow = 11,
-			RadarCustomWindow = 12,
+			MovementWindow = 7,
+			FunnisWindow = 8,
+			FriendsWindow = 9,
+			TargetsWindow = 10,
+			ProfilesWindow = 11,
+			["Text GUICustomWindow"] = 12,
+			TargetInfoCustomWindow = 13,
+			RadarCustomWindow = 14,
 		}
 		local storedpos = {}
 		local num = 6
