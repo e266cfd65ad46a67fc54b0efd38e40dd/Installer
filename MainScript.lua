@@ -1356,9 +1356,9 @@ CustomText.Object.Visible = false
 
 local function newHealthColor(percent)
 	if percent > 0.5 then 
-		return Color3.fromRGB(5, 134, 105):lerp(Color3.fromRGB(255, 255, 0), (0.5 - (percent - 0.5)) / 0.5)
+		return Color3.fromRGB(218, 112, 214):lerp(Color3.fromRGB(204, 204, 255), (0.5 - (percent - 0.5)) / 0.5)
 	end
-	return Color3.fromRGB(255, 255, 0):lerp(Color3.fromRGB(249, 57, 55), (0.5 - percent) / 0.5)
+	return Color3.fromRGB(204, 204, 255):lerp(Color3.fromRGB(216, 191, 216), (0.5 - percent) / 0.5)
 end
 
 local TargetInfo = GuiLibrary.CreateCustomWindow({
@@ -1368,14 +1368,14 @@ local TargetInfo = GuiLibrary.CreateCustomWindow({
 })
 local TargetInfoBackground = {Enabled = false}
 local TargetInfoMainFrame = Instance.new("Frame")
-TargetInfoMainFrame.BackgroundColor3 = Color3.fromRGB(26, 25, 26)
+TargetInfoMainFrame.BackgroundColor3 = Color3.fromRGB(93, 63, 211)
 TargetInfoMainFrame.BorderSizePixel = 0
 TargetInfoMainFrame.BackgroundTransparency = 1
 TargetInfoMainFrame.Size = UDim2.new(0, 220, 0, 72)
 TargetInfoMainFrame.Position = UDim2.new(0, 0, 0, 5)
 TargetInfoMainFrame.Parent = TargetInfo.GetCustomChildren()
 local TargetInfoMainInfo = Instance.new("Frame")
-TargetInfoMainInfo.BackgroundColor3 = Color3.fromRGB(31, 30, 31)
+TargetInfoMainInfo.BackgroundColor3 = Color3.fromRGB(93, 63, 211)
 TargetInfoMainInfo.Size = UDim2.new(0, 220, 0, 80)
 TargetInfoMainInfo.BackgroundTransparency = 0.25
 TargetInfoMainInfo.Position = UDim2.new(0, 0, 0, 0)
@@ -1384,7 +1384,7 @@ TargetInfoMainInfo.Parent = TargetInfoMainFrame
 local TargetInfoName = Instance.new("TextLabel")
 TargetInfoName.TextSize = 14
 TargetInfoName.Font = Enum.Font.Arial
-TargetInfoName.TextColor3 = Color3.fromRGB(162, 162, 162)
+TargetInfoName.TextColor3 = Color3.fromRGB(93, 63, 211)
 TargetInfoName.Position = UDim2.new(0, 70, 0, 10)
 TargetInfoName.TextStrokeTransparency = 1
 TargetInfoName.BackgroundTransparency = 1
@@ -1405,7 +1405,7 @@ TargetInfoName:GetPropertyChangedSignal("Text"):Connect(function()
 end)
 TargetInfoNameShadow.Parent = TargetInfoName
 local TargetInfoHealthBackground = Instance.new("Frame")
-TargetInfoHealthBackground.BackgroundColor3 = Color3.fromRGB(54, 54, 54)
+TargetInfoHealthBackground.BackgroundColor3 = Color3.fromRGB(93, 63, 211)
 TargetInfoHealthBackground.Size = UDim2.new(0, 140, 0, 4)
 TargetInfoHealthBackground.Position = UDim2.new(0, 72, 0, 32)
 TargetInfoHealthBackground.Parent = TargetInfoMainInfo
@@ -1422,13 +1422,13 @@ TargetInfoHealthBackgroundShadow.ScaleType = Enum.ScaleType.Slice
 TargetInfoHealthBackgroundShadow.SliceCenter = Rect.new(10, 10, 118, 118)
 TargetInfoHealthBackgroundShadow.Parent = TargetInfoHealthBackground
 local TargetInfoHealth = Instance.new("Frame")
-TargetInfoHealth.BackgroundColor3 = Color3.fromRGB(40, 137, 109)
+TargetInfoHealth.BackgroundColor3 = Color3.fromRGB(93, 63, 211)
 TargetInfoHealth.Size = UDim2.new(1, 0, 1, 0)
 TargetInfoHealth.ZIndex = 3
 TargetInfoHealth.BorderSizePixel = 0
 TargetInfoHealth.Parent = TargetInfoHealthBackground
 local TargetInfoHealthExtra = Instance.new("Frame")
-TargetInfoHealthExtra.BackgroundColor3 = Color3.fromRGB(255, 170, 0)
+TargetInfoHealthExtra.BackgroundColor3 = Color3.fromRGB(195, 177, 225)
 TargetInfoHealthExtra.Size = UDim2.new(0, 0, 1, 0)
 TargetInfoHealthExtra.ZIndex = 4
 TargetInfoHealthExtra.BorderSizePixel = 0
@@ -1445,13 +1445,13 @@ local TargetInfoMainInfoCorner = Instance.new("UICorner")
 TargetInfoMainInfoCorner.CornerRadius = UDim.new(0, 4)
 TargetInfoMainInfoCorner.Parent = TargetInfoMainInfo
 local TargetInfoHealthBackgroundCorner = Instance.new("UICorner")
-TargetInfoHealthBackgroundCorner.CornerRadius = UDim.new(0, 2048)
+TargetInfoHealthBackgroundCorner.CornerRadius = UDim.new(0, 1024)
 TargetInfoHealthBackgroundCorner.Parent = TargetInfoHealthBackground
 local TargetInfoHealthCorner = Instance.new("UICorner")
-TargetInfoHealthCorner.CornerRadius = UDim.new(0, 2048)
+TargetInfoHealthCorner.CornerRadius = UDim.new(0, 1024)
 TargetInfoHealthCorner.Parent = TargetInfoHealth
 local TargetInfoHealthCorner2 = Instance.new("UICorner")
-TargetInfoHealthCorner2.CornerRadius = UDim.new(0, 2048)
+TargetInfoHealthCorner2.CornerRadius = UDim.new(0, 1024)
 TargetInfoHealthCorner2.Parent = TargetInfoHealthExtra
 local TargetInfoHealthExtraCorner = Instance.new("UICorner")
 TargetInfoHealthExtraCorner.CornerRadius = UDim.new(0, 4)
@@ -1469,7 +1469,7 @@ TargetInfoBackground = TargetInfo.CreateToggle({
 	Name = "Use Background",
 	Function = function(callback) 
 		TargetInfoMainInfo.BackgroundTransparency = callback and 0.25 or 1
-		TargetInfoName.TextColor3 = callback and Color3.fromRGB(162, 162, 162) or Color3.new(1, 1, 1)
+		TargetInfoName.TextColor3 = callback and Color3.fromRGB(195, 177, 225) or Color3.new(1, 1, 1)
 		TargetInfoName.Size = UDim2.new(0, 80, 0, callback and 16 or 18)
 		TargetInfoName.TextSize = callback and 14 or 15
 		TargetInfoHealthBackground.Size = UDim2.new(0, 138, 0, callback and 4 or 7)
