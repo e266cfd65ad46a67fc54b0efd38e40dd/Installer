@@ -1,5 +1,5 @@
 if shared.VapeExecuted then
-	local VERSION = "Render Vape"
+	local VERSION = "4.10"..(shared.VapePrivate and " PRIVATE" or "").." "..readfile("vape/commithash.txt"):sub(1, 6)
 	local baseDirectory = (shared.VapePrivate and "vapeprivate/" or "vape/")
 	local vapeAssetTable = {
 		["vape/assets/AddItem.png"] = "rbxassetid://13350763121",
@@ -102,9 +102,6 @@ if shared.VapeExecuted then
 	local tweenService = game:GetService("TweenService")
 	local guiService = game:GetService("GuiService")
 	local textService = game:GetService("TextService")
-	local gethui = gethui or function()
-		return game:GetService("CoreGui")
-	end
 	local translations = shared.VapeTranslation or {}
 	local translatedlogo = false
 
@@ -510,7 +507,6 @@ if shared.VapeExecuted then
 	end)
 
 	if type(teleportdata) == "table" and (teleportdata.match or teleportdata.customMatch) and game.PlaceId ~= 6872265039 then 
-		print('cock test')
 		getgenv().bedwars = true 
 		shared.CustomVapeSave = 6872274481
 	end
