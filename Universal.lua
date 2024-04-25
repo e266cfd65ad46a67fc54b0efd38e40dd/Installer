@@ -3712,38 +3712,6 @@ run(function()
 end)
 
 run(function()
-	local Health = {Enabled = false}
-	Health =  GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
-		Name = "Health",
-		Function = function(callback)
-			if callback then
-				HealthText = Drawing.new("Text")
-				HealthText.Size = 20
-				HealthText.Text = "100HP"
-				HealthText.Position = Vector2.new(0, 0)
-				HealthText.Color = Color3.fromRGB(0, 255, 0)
-				HealthText.Center = true
-				HealthText.Visible = true
-				task.spawn(function()
-					repeat
-						if entityLibrary.isAlive then
-							HealthText.Text = tostring(math.round(entityLibrary.character.Humanoid.Health)).."HP"
-							HealthText.Color = Color3.fromHSV(math.clamp(entityLibrary.character.Humanoid.Health / entityLibrary.character.Humanoid.MaxHealth, 0, 1) / 2.5, 0.89, 1)
-						end
-						HealthText.Position = Vector2.new(gameCamera.ViewportSize.X / 2, gameCamera.ViewportSize.Y / 2 + 70)
-						task.wait(0.1)
-					until not Health.Enabled
-				end)
-			else
-				if HealthText then HealthText:Remove() end
-				RunLoops:UnbindFromRenderStep("Health")
-			end
-		end,
-		HoverText = "Displays your health in the center of your screen."
-	})
-end)
-
-run(function()
 	local function floorNameTagPosition(pos)
 		return Vector2.new(math.floor(pos.X), math.floor(pos.Y))
 	end
