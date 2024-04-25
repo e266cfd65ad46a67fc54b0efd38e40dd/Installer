@@ -5870,138 +5870,194 @@ run(function()
 end)
 
 run(function()
-	local Atmosphere = {Enabled = false}
-	local SkyUp = {Value = ""}
-	local SkyDown = {Value = ""}
-	local SkyLeft = {Value = ""}
-	local SkyRight = {Value = ""}
-	local SkyFront = {Value = ""}
-	local SkyBack = {Value = ""}
-	local SkySun = {Value = ""}
-	local SkyMoon = {Value = ""}
+	local Atmosphere = {}
+	local AtmosphereMethod = {Value = 'Custom'}
+	local skythemeobjects = {}
+	local SkyUp = {Value = ''}
+	local SkyDown = {Value = ''}
+	local SkyLeft = {Value = ''}
+	local SkyRight = {Value = ''}
+	local SkyFront = {Value = ''}
+	local SkyBack = {Value = ''}
+	local SkySun = {Value = ''}
+	local SkyMoon = {Value = ''}
 	local SkyColor = {Value = 1}
 	local skyobj
 	local skyatmosphereobj
+	local oldtime
 	local oldobjects = {}
-	Atmosphere = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
-		Name = "Atmosphere",
-		Function = function(callback)
-			if callback then
-				for i,v in pairs(lightingService:GetChildren()) do
-					if v:IsA("PostEffect") or v:IsA("Sky") then
-						table.insert(oldobjects, v)
-						v.Parent = game
+
+	local skyThemes = {
+			PurpleStars = {8539982183, 8539981943, 8539981721, 8539981424, 8539980766, 8539981085},
+			Smoothpink = {433274085, 433274194, 433274131, 433274370, 433274429, 433274285},
+			Vibe = {1417494030, 1417494146, 1417494253, 1417494402, 1417494499, 1417494643},
+			Sunset = {415688378, 415688193, 415688242, 415688310, 415688274, 415688354},
+			Smoothcity = {11263062161, 11263065295, 11263066644, 11263068413, 11263069782, 11263070890},
+			Wolf = {12064107, 12064152, 12064121, 12063984, 12064115, 12064131},
+			Tide = {154185004, 154184960, 154185021, 154184943, 154184972, 154185031},
+			Grandma = {561131924, 561131924, 561131924, 561131924, 561131924, 561131924},
+			Pink = {271042516, 271077243, 271042556, 271042310, 271042467, 271077958}
+	}
+
+	local function applyTheme(theme)
+			task.spawn(function()
+					local sky = lightingService.Sky
+					sky.SkyboxBk = "rbxassetid://" .. theme[1]
+					sky.SkyboxDn = "rbxassetid://" .. theme[2]
+					sky.SkyboxFt = "rbxassetid://" .. theme[3]
+					sky.SkyboxLf = "rbxassetid://" .. theme[4]
+					sky.SkyboxRt = "rbxassetid://" .. theme[5]
+					sky.SkyboxUp = "rbxassetid://" .. theme[6]
+			end)
+	end
+
+	local themetable = {}
+	for theme, urls in pairs(skyThemes) do
+			themetable[theme] = function()
+					applyTheme(urls)
+			end
+	end
+
+		Atmosphere = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+			Name = 'Atmosphere',
+			ExtraText = function() return AtmosphereMethod.Value ~= 'Custom' and AtmosphereMethod.Value or '' end,
+			Function = function(callback)
+					if callback then 
+							for _, v in ipairs(lightingService:GetChildren()) do 
+									if v:IsA('PostEffect') or v:IsA('Sky') then 
+											table.insert(oldobjects, v)
+											v.Parent = game
+									end
+							end
+							skyobj, skyatmosphereobj = Instance.new('Sky'), Instance.new('ColorCorrectionEffect')
+							skyobj.Parent, skyatmosphereobj.Parent = lightingService, lightingService
+							skyatmosphereobj.TintColor = Color3.fromHSV(SkyColor.Hue, SkyColor.Sat, SkyColor.Value)
+							task.spawn(themetable[AtmosphereMethod.Value])
+					else
+							for _, v in ipairs(oldobjects) do v.Parent = lightingService end
+							skyobj, skyatmosphereobj = nil, nil
+							oldtime, oldobjects = nil, {}
 					end
-				end
-				skyobj = Instance.new("Sky")
-				skyobj.SkyboxBk = tonumber(SkyBack.Value) and "rbxassetid://"..SkyBack.Value or SkyBack.Value
-				skyobj.SkyboxDn = tonumber(SkyDown.Value) and "rbxassetid://"..SkyDown.Value or SkyDown.Value
-				skyobj.SkyboxFt = tonumber(SkyFront.Value) and "rbxassetid://"..SkyFront.Value or SkyFront.Value
-				skyobj.SkyboxLf = tonumber(SkyLeft.Value) and "rbxassetid://"..SkyLeft.Value or SkyLeft.Value
-				skyobj.SkyboxRt = tonumber(SkyRight.Value) and "rbxassetid://"..SkyRight.Value or SkyRight.Value
-				skyobj.SkyboxUp = tonumber(SkyUp.Value) and "rbxassetid://"..SkyUp.Value or SkyUp.Value
-				skyobj.SunTextureId = tonumber(SkySun.Value) and "rbxassetid://"..SkySun.Value or SkySun.Value
-				skyobj.MoonTextureId = tonumber(SkyMoon.Value) and "rbxassetid://"..SkyMoon.Value or SkyMoon.Value
-				skyobj.Parent = lightingService
-				skyatmosphereobj = Instance.new("ColorCorrectionEffect")
-				skyatmosphereobj.TintColor = Color3.fromHSV(SkyColor.Hue, SkyColor.Sat, SkyColor.Value)
-				skyatmosphereobj.Parent = lightingService
-			else
-				if skyobj then skyobj:Destroy() end
-				if skyatmosphereobj then skyatmosphereobj:Destroy() end
-				for i,v in pairs(oldobjects) do
-					v.Parent = lightingService
-				end
-				table.clear(oldobjects)
 			end
+	})
+
+	local themetab = {'Custom'}
+	for i,v in pairs(skyThemes) do 
+			table.insert(themetab, i)
+	end
+
+	AtmosphereMethod = Atmosphere.CreateDropdown({
+		Name = 'Mode',
+		List = themetab,
+		Function = function(val)
+				task.spawn(function()
+						if Atmosphere.Enabled then 
+								Atmosphere.ToggleButton()
+								if val == 'Custom' then task.wait() end
+								Atmosphere.ToggleButton()
+						end
+						for i,v in skythemeobjects do 
+							table.insert(skythemeobjects, obj)
+								v.Object.Visible = AtmosphereMethod.Value == 'Custom'
+						end
+				end)
 		end
 	})
+
 	SkyUp = Atmosphere.CreateTextBox({
-		Name = "SkyUp",
-		TempText = "Sky Top ID",
-		FocusLost = function(enter)
-			if Atmosphere.Enabled then
-				Atmosphere.ToggleButton(false)
-				Atmosphere.ToggleButton(false)
-			end
+		Name = 'SkyUp',
+		TempText = 'Sky Top ID',
+		FocusLost = function(enter) 
+				if Atmosphere.Enabled then 
+						Atmosphere.ToggleButton()
+						Atmosphere.ToggleButton()
+				end
 		end
 	})
+
 	SkyDown = Atmosphere.CreateTextBox({
-		Name = "SkyDown",
-		TempText = "Sky Bottom ID",
-		FocusLost = function(enter)
-			if Atmosphere.Enabled then
-				Atmosphere.ToggleButton(false)
-				Atmosphere.ToggleButton(false)
-			end
+		Name = 'SkyDown',
+		TempText = 'Sky Bottom ID',
+		FocusLost = function(enter) 
+				if Atmosphere.Enabled then 
+						Atmosphere.ToggleButton()
+						Atmosphere.ToggleButton()
+				end
 		end
 	})
+
 	SkyLeft = Atmosphere.CreateTextBox({
-		Name = "SkyLeft",
-		TempText = "Sky Left ID",
-		FocusLost = function(enter)
-			if Atmosphere.Enabled then
-				Atmosphere.ToggleButton(false)
-				Atmosphere.ToggleButton(false)
-			end
+		Name = 'SkyLeft',
+		TempText = 'Sky Left ID',
+		FocusLost = function(enter) 
+				if Atmosphere.Enabled then 
+						Atmosphere.ToggleButton()
+						Atmosphere.ToggleButton()
+				end
 		end
 	})
+
 	SkyRight = Atmosphere.CreateTextBox({
-		Name = "SkyRight",
-		TempText = "Sky Right ID",
-		FocusLost = function(enter)
-			if Atmosphere.Enabled then
-				Atmosphere.ToggleButton(false)
-				Atmosphere.ToggleButton(false)
-			end
+		Name = 'SkyRight',
+		TempText = 'Sky Right ID',
+		FocusLost = function(enter) 
+				if Atmosphere.Enabled then 
+						Atmosphere.ToggleButton()
+						Atmosphere.ToggleButton()
+				end
 		end
 	})
+
 	SkyFront = Atmosphere.CreateTextBox({
-		Name = "SkyFront",
-		TempText = "Sky Front ID",
-		FocusLost = function(enter)
-			if Atmosphere.Enabled then
-				Atmosphere.ToggleButton(false)
-				Atmosphere.ToggleButton(false)
-			end
+		Name = 'SkyFront',
+		TempText = 'Sky Front ID',
+		FocusLost = function(enter) 
+				if Atmosphere.Enabled then 
+						Atmosphere.ToggleButton()
+						Atmosphere.ToggleButton()
+				end
 		end
 	})
+
 	SkyBack = Atmosphere.CreateTextBox({
-		Name = "SkyBack",
-		TempText = "Sky Back ID",
-		FocusLost = function(enter)
-			if Atmosphere.Enabled then
-				Atmosphere.ToggleButton(false)
-				Atmosphere.ToggleButton(false)
-			end
+		Name = 'SkyBack',
+		TempText = 'Sky Back ID',
+		FocusLost = function(enter) 
+				if Atmosphere.Enabled then 
+						Atmosphere.ToggleButton()
+						Atmosphere.ToggleButton()
+				end
 		end
 	})
+
 	SkySun = Atmosphere.CreateTextBox({
-		Name = "SkySun",
-		TempText = "Sky Sun ID",
-		FocusLost = function(enter)
-			if Atmosphere.Enabled then
-				Atmosphere.ToggleButton(false)
-				Atmosphere.ToggleButton(false)
-			end
+		Name = 'SkySun',
+		TempText = 'Sky Sun ID',
+		FocusLost = function(enter) 
+				if Atmosphere.Enabled then 
+						Atmosphere.ToggleButton()
+						Atmosphere.ToggleButton()
+				end
 		end
 	})
+
 	SkyMoon = Atmosphere.CreateTextBox({
-		Name = "SkyMoon",
-		TempText = "Sky Moon ID",
-		FocusLost = function(enter)
-			if Atmosphere.Enabled then
-				Atmosphere.ToggleButton(false)
-				Atmosphere.ToggleButton(false)
-			end
+		Name = 'SkyMoon',
+		TempText = 'Sky Moon ID',
+		FocusLost = function(enter) 
+				if Atmosphere.Enabled then 
+						Atmosphere.ToggleButton()
+						Atmosphere.ToggleButton()
+				end
 		end
 	})
+
 	SkyColor = Atmosphere.CreateColorSlider({
-		Name = "Color",
+		Name = 'Color',
 		Function = function(h, s, v)
-			if skyatmosphereobj then
-				skyatmosphereobj.TintColor = Color3.fromHSV(SkyColor.Hue, SkyColor.Sat, SkyColor.Value)
-			end
+				if skyatmosphereobj then 
+						skyatmosphereobj.TintColor = Color3.fromHSV(SkyColor.Hue, SkyColor.Sat, SkyColor.Value)
+				end
 		end
 	})
 end)
@@ -6017,7 +6073,6 @@ run(function()
 			return true
 		end
 	end
-
 
 	Disabler = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
 		Name = "ClientKickDisabler",
