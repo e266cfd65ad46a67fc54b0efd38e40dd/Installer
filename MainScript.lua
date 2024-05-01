@@ -303,8 +303,8 @@ local Movement = GuiLibrary.CreateWindow({
 	Icon = "vape/assets/WorldIcon.png", 
 	IconSize = 0
 })
-local Funnis = GuiLibrary.CreateWindow({
-	Name = "Funnis", 
+local Exploit = GuiLibrary.CreateWindow({
+	Name = "Exploit", 
 	Icon = "vape/assets/WorldIcon.png", 
 	IconSize = 0
 })
@@ -361,8 +361,8 @@ GUI.CreateButton({
 	IconSize = 0
 })
 GUI.CreateButton({
-	Name = "Funnis", 
-	Function = function(callback) Funnis.SetVisible(callback) end, 
+	Name = "Exploit", 
+	Function = function(callback) Exploit.SetVisible(callback) end, 
 	Icon = "vape/assets/WorldIcon.png", 
 	IconSize = 0
 })
@@ -1596,12 +1596,12 @@ local windowSortOrder = {
 	UtilityButton = 4,
 	WorldButton = 5,
 	MovementButton = 6,
-	FunnisButton = 7,
+	ExploitButton = 7,
 	FriendsButton = 8,
 	TargetsButton = 9,
 	ProfilesButton = 10
 }
-local windowSortOrder2 = {"Combat", "Blatant", "Render", "Utility", "World", "Movement", "Funnis"}
+local windowSortOrder2 = {"Combat", "Blatant", "Render", "Utility", "World", "Movement", "Exploit"}
 
 local function getVapeSaturation(val)
 	local sat = 0.9
@@ -1923,7 +1923,7 @@ GUISettings.CreateButton2({
 			UtilityWindow = 5,
 			WorldWindow = 6,
 			MovementWindow = 7,
-			FunnisWindow = 8,
+			ExploitWindow = 8,
 			FriendsWindow = 9,
 			TargetsWindow = 10,
 			ProfilesWindow = 11,
